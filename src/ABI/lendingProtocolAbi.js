@@ -1,5 +1,5 @@
 export const protocol_contract_address =
-  "0xa2191808C13FE4f2666a14bcEF5d57c24472D5e4";
+  "0x946Ee3d3D964148CE930Ff2e7A6f5e6585336F21";
 export const lendingProtocolAbi = [
   {
     inputs: [
