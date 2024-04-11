@@ -1,5 +1,6 @@
-export const contract_address = "0xa2191808C13FE4f2666a14bcEF5d57c24472D5e4";
-export const abi = [
+export const protocol_contract_address =
+  "0xa2191808C13FE4f2666a14bcEF5d57c24472D5e4";
+export const lendingProtocolAbi = [
   {
     inputs: [
       {
