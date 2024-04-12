@@ -11,9 +11,6 @@ const WalletComponent = () => {
   const connectWallet = () => {
     connect({ connector: injected() });
   };
-  const disconnectWallet = () => {
-    () => disconnect();
-  };
 
   return (
     <Box>
