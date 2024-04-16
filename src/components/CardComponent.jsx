@@ -20,7 +20,8 @@ export default function CardComponent({ userInfo }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        {userInfo && (
+        {/* if lender */}
+        {userInfo.amountLent && (
           <Box>
             <Typography
               sx={{ fontSize: 14 }}
@@ -35,7 +36,30 @@ export default function CardComponent({ userInfo }) {
               color="text.secondary"
               gutterBottom
             >
-              Interst Earned: {formatEther(userInfo.interestEarned)}
+              Interest Earned: {formatEther(userInfo.interestEarned)}
+            </Typography>{" "}
+            <Typography sx={{ fontSize: 14 }} gutterBottom>
+              {userInfo.depositTime &&
+                `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}{" "}
+            </Typography>
+          </Box>
+        )}
+        {/* if borrower */}
+        {userInfo.ethDeposited && (
+          <Box>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Amount of ETH deposited: {formatEther(userInfo.ethDeposited)}
+            </Typography>
+            <Typography
+              sx={{ fontSize: 14 }}
+              color="text.secondary"
+              gutterBottom
+            >
+              Interest Earned: {formatEther(userInfo.interestEarned)}
             </Typography>{" "}
             <Typography sx={{ fontSize: 14 }} gutterBottom>
               {userInfo.depositTime &&

@@ -8,9 +8,11 @@ import {
 } from "./ABI/lendingProtocolAbi.js";
 import { useReadContract, useAccount } from "wagmi";
 const App = () => {
-  const { address, isConnected } = useAccount();
+  const { address, status, isConnected } = useAccount();
   //lender functions
   console.log(address);
+  console.log(isConnected);
+  console.log(status);
 
   const lenderinfo = useReadContract({
     abi: lendingProtocolAbi,
@@ -21,6 +23,14 @@ const App = () => {
   console.log(lenderinfo.data);
 
   //borrower functions
+
+  const borrowerinfo = useReadContract({
+    abi: lendingProtocolAbi,
+    address: protocol_contract_address,
+    functionName: "getBorrowerInfo",
+    args: [address],
+  });
+  console.log(borrowerinfo.data);
   return (
     <Box>
       <NavbarComponent />
@@ -32,10 +42,12 @@ const App = () => {
           border: "1px solid red",
         }}
       >
-        {/* lender */}
-        <CardComponent userInfo={lenderinfo.data} />
-        {/* borrower */}
-        {/* <CardComponent /> */}
+        {status === "connected" && (
+          <>
+            <CardComponent userInfo={lenderinfo.data} />
+            <CardComponent userInfo={borrowerinfo.data} />
+          </>
+        )}
       </Box>
     </Box>
   );
