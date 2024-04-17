@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { formatEther, parseUnits } from "viem";
+import { formatEther, parseEther, parseUnits } from "viem";
 import { useWriteContract } from "wagmi";
 import {
   lendingProtocolAbi,
@@ -16,17 +16,11 @@ import { useState } from "react";
 import { TextField } from "@mui/material";
 
 export default function CardComponent({ userInfo, position }) {
-  console.log(userInfo);
-  // console.log(userInfo.depositTime);
-  // console.log("collateral value" + typeof userInfo.collateralValue);
-  // console.log(userInfo.collateralValue);
-  // console.log("eth deposited" + typeof userInfo.ethDeposited);
-  // console.log(userInfo.ethDeposited);
-  //state
   const [LPTAmount, setLPTAmount] = useState(0);
   const [ETHAmount, setETHAmount] = useState(0);
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess, write } =
+    useWriteContract();
 
   const handleApprove = async () => {
     try {
@@ -54,12 +48,25 @@ export default function CardComponent({ userInfo, position }) {
     }
   };
 
-  //merge above functions together
-
   const handleDepositLPT = async () => {
+    console.log(LPTAmount);
     try {
       await handleApprove();
       await callDepositLPT();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const callDepositETH = async () => {
+    console.log(ETHAmount);
+    try {
+      writeContract({
+        abi: lendingProtocolAbi,
+        address: protocol_contract_address,
+        functionName: "depositETH",
+        args: [parseEther(ETHAmount)],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -81,21 +88,21 @@ export default function CardComponent({ userInfo, position }) {
               gutterBottom
             >
               Amount of LPT lent to the protocol:{" "}
-              {formatEther(userInfo.amountLent)}
+              {formatEther(userInfo?.amountLent || 0)}
             </Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Interest Earned: {formatEther(userInfo.interestEarned)}
+              Interest Earned: {formatEther(userInfo?.interestEarned || 0)}
             </Typography>
             <Typography sx={{ fontSize: 14 }} gutterBottom>
-              {userInfo.depositTime &&
+              {userInfo?.depositTime &&
                 `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}
             </Typography>
             <TextField
-              id="ohandleDepositLPTutlined-number"
+              id="outlined-number"
               label="Number"
               type="number"
               InputLabelProps={{
@@ -111,21 +118,20 @@ export default function CardComponent({ userInfo, position }) {
               color="text.secondary"
               gutterBottom
             >
-              {/* great line. because ethDeposited returns undefined */}
               Amount of ETH deposited:{" "}
-              {typeof userInfo.ethDeposited === "bigint"
+              {typeof userInfo?.ethDeposited === "bigint"
                 ? formatEther(userInfo.ethDeposited)
-                : userInfo.ethDeposited || "0"}{" "}
+                : userInfo?.ethDeposited || "0"}
             </Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Collateral Value: {formatEther(userInfo.collateralValue)}
+              Collateral Value: {formatEther(userInfo?.collateralValue || 0)}
             </Typography>
             <Typography sx={{ fontSize: 14 }} gutterBottom>
-              {userInfo.depositTime &&
+              {userInfo?.depositTime &&
                 `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}
             </Typography>
             <TextField
@@ -135,6 +141,7 @@ export default function CardComponent({ userInfo, position }) {
               InputLabelProps={{
                 shrink: true,
               }}
+              onChange={(e) => setETHAmount(e.target.value)}
             />
           </Box>
         ) : (
@@ -149,7 +156,9 @@ export default function CardComponent({ userInfo, position }) {
             Deposit LPT
           </Button>
         ) : position === "borrower" ? (
-          <Button size="small">Deposit ETH</Button>
+          <Button size="small" onClick={callDepositETH}>
+            Deposit ETH
+          </Button>
         ) : null}
       </CardActions>
     </Card>
