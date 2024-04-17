@@ -7,10 +7,13 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { formatEther } from "viem";
 
-export default function CardComponent({ userInfo }) {
+export default function CardComponent({ userInfo, position }) {
   console.log(userInfo);
   console.log(userInfo.depositTime);
-  console.log(userInfo.depositTime);
+  console.log("collateral value" + typeof userInfo.collateralValue);
+  console.log(userInfo.collateralValue);
+  console.log("eth deposited" + typeof userInfo.ethDeposited);
+  console.log(userInfo.ethDeposited);
 
   const giveTimestamp = (timestamp) => {
     const date = new Date(Number(timestamp) * 1000);
@@ -20,8 +23,7 @@ export default function CardComponent({ userInfo }) {
   return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
-        {/* if lender */}
-        {userInfo.amountLent && (
+        {position === "lender" ? (
           <Box>
             <Typography
               sx={{ fontSize: 14 }}
@@ -37,35 +39,40 @@ export default function CardComponent({ userInfo }) {
               gutterBottom
             >
               Interest Earned: {formatEther(userInfo.interestEarned)}
-            </Typography>{" "}
+            </Typography>
             <Typography sx={{ fontSize: 14 }} gutterBottom>
               {userInfo.depositTime &&
-                `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}{" "}
+                `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}
             </Typography>
           </Box>
-        )}
-        {/* if borrower */}
-        {userInfo.ethDeposited && (
+        ) : position === "borrower" ? (
           <Box>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Amount of ETH deposited: {formatEther(userInfo.ethDeposited)}
+              Amount of ETH deposited:{" "}
+              {typeof userInfo.ethDeposited === "bigint"
+                ? formatEther(userInfo.ethDeposited)
+                : userInfo.ethDeposited || "0"}{" "}
             </Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
               gutterBottom
             >
-              Interest Earned: {formatEther(userInfo.interestEarned)}
-            </Typography>{" "}
+              Collateral Value: {formatEther(userInfo.collateralValue)}
+            </Typography>
             <Typography sx={{ fontSize: 14 }} gutterBottom>
               {userInfo.depositTime &&
-                `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}{" "}
+                `Deposit Time: ${giveTimestamp(userInfo.depositTime)}`}
             </Typography>
           </Box>
+        ) : (
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            No position found.
+          </Typography>
         )}
       </CardContent>
       <CardActions>
