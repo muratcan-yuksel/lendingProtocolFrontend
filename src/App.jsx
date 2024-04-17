@@ -44,8 +44,17 @@ const App = () => {
       >
         {status === "connected" && (
           <>
-            <CardComponent userInfo={lenderinfo.data} position={"lender"} />
-            <CardComponent userInfo={borrowerinfo.data} position={"borrower"} />
+            <Box>
+              <h2>Lender</h2>
+              <CardComponent userInfo={lenderinfo.data} position={"lender"} />
+            </Box>
+            <Box>
+              <h2>Borrower</h2>
+              <CardComponent
+                userInfo={borrowerinfo.data}
+                position={"borrower"}
+              />
+            </Box>
           </>
         )}
       </Box>
