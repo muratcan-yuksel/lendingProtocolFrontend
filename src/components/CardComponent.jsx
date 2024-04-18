@@ -19,8 +19,7 @@ export default function CardComponent({ userInfo, position }) {
   const [LPTAmount, setLPTAmount] = useState(0);
   const [ETHAmount, setETHAmount] = useState(0);
 
-  const { writeContract, isError, isPending, isSuccess, write } =
-    useWriteContract();
+  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
 
   const handleApprove = async () => {
     try {
