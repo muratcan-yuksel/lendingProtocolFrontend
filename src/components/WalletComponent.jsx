@@ -7,6 +7,7 @@ const WalletComponent = () => {
   console.log(status);
   const { disconnect } = useDisconnect();
   const account = useAccount();
+  console.log(account.isConnected);
 
   const connectWallet = () => {
     connect({ connector: injected() });
@@ -14,7 +15,7 @@ const WalletComponent = () => {
 
   return (
     <Box>
-      {status === "success" ? (
+      {status === "success" || account.isConnected ? (
         <Box>
           <Box>Connected to {account.address}</Box>
           <Button onClick={() => disconnect()}>Disconnect</Button>{" "}
