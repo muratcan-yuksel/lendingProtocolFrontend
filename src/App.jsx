@@ -53,7 +53,6 @@ const App = () => {
           display: "flex",
           justifyContent: "space-evenly",
           alignItems: "center",
-          border: "1px solid red",
         }}
       >
         {status === "connected" && (
@@ -73,7 +72,7 @@ const App = () => {
         )}
       </Box>
       <Box>
-        {isConnected && (
+        {isConnected && totalLiquidity.data && totalETHLocked.data && (
           <Box>
             {" "}
             <Typography
