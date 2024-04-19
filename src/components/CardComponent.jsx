@@ -84,7 +84,8 @@ export default function CardComponent({ userInfo, position }) {
         background: `linear-gradient(to right, #9613a1 0%, rgba(161, 198, 255, 1) 100%)`,
         borderRadius: 10, // Add some rounded corners
         color: "white",
-        padding: "2em",
+
+        border: "5px solid red",
       }}
     >
       {" "}

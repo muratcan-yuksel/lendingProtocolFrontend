@@ -7,12 +7,12 @@ import WalletComponent from "./WalletComponent";
 
 export default function ButtonAppBar() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{}}>
       <AppBar
         sx={{
-          background: `linear-gradient(to right, #9613a1 0%, rgba(161, 198, 255, 1) 100%)`,
+          background:
+            "linear-gradient(90deg, rgba(104, 110, 255, 1) 0%, rgba(141, 198, 255, 1) 100%)",
         }}
-        position="static"
       >
         <Toolbar>
           <IconButton

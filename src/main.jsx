@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { config } from "../config.js";
 import { Box } from "@mui/material";
+import "./index.css";
 
 const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -15,8 +16,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
           sx={{
             background:
               "linear-gradient(90deg, rgba(104, 110, 255, 1) 0%, rgba(141, 198, 255, 1) 100%)",
-            height: "100%",
-            width: "100%",
+            height: "100vh",
+            width: "100vw",
           }}
         >
           <App />

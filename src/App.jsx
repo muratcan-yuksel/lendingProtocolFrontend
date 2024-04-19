@@ -46,32 +46,49 @@ const App = () => {
   });
   console.log(borrowerinfo.data);
   return (
-    <Box>
+    <Box
+      sx={{
+        height: "100vh",
+        width: "100%",
+        // display: "flex",
+        // flexDirection: "column",
+        // alignItems: "center",
+        // background:
+        //   "linear-gradient(90deg, rgba(104, 110, 255, 1) 0%, rgba(141, 198, 255, 1) 100%)",
+      }}
+    >
       <NavbarComponent />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-evenly",
-          alignItems: "center",
-        }}
-      >
+      <Box sx={{}}>
         {status === "connected" && (
           <>
-            <Box>
-              <h2>Lender</h2>
-              <CardComponent userInfo={lenderinfo.data} position={"lender"} />
-            </Box>
-            <Box>
-              <h2>Borrower</h2>
-              <CardComponent
-                userInfo={borrowerinfo.data}
-                position={"borrower"}
-              />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
+                justifyContent: "space-around",
+                margin: "5em 10px",
+              }}
+            >
+              {" "}
+              <Box>
+                <h2>Lender</h2>
+                <CardComponent userInfo={lenderinfo.data} position={"lender"} />
+              </Box>
+              <Box>
+                <h2>Borrower</h2>
+                <CardComponent
+                  userInfo={borrowerinfo.data}
+                  position={"borrower"}
+                />
+              </Box>
             </Box>
           </>
         )}
       </Box>
-      <Box>
+      {/* <Box>
         {isConnected && (
           <Box>
             {" "}
@@ -91,7 +108,7 @@ const App = () => {
             </Typography>{" "}
           </Box>
         )}
-      </Box>
+      </Box> */}
     </Box>
   );
 };
