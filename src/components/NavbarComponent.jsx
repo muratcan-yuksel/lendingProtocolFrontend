@@ -8,7 +8,12 @@ import WalletComponent from "./WalletComponent";
 export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar sx={{ backgroundColor: "black" }} position="static">
+      <AppBar
+        sx={{
+          background: `linear-gradient(to right, #9613a1 0%, rgba(161, 198, 255, 1) 100%)`,
+        }}
+        position="static"
+      >
         <Toolbar>
           <IconButton
             size="large"
@@ -17,7 +22,11 @@ export default function ButtonAppBar() {
             aria-label="menu"
             sx={{ mr: 2 }}
           ></IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, color: "white" }}
+          >
             Lending Protocol
           </Typography>
           <WalletComponent />

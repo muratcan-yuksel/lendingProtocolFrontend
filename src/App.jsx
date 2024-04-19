@@ -72,7 +72,7 @@ const App = () => {
         )}
       </Box>
       <Box>
-        {isConnected && totalLiquidity.data && totalETHLocked.data && (
+        {isConnected && (
           <Box>
             {" "}
             <Typography
