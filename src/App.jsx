@@ -6,10 +6,16 @@ import {
   lendingProtocolAbi,
   protocol_contract_address,
 } from "./ABI/lendingProtocolAbi.js";
-import { useReadContract, useAccount } from "wagmi";
+import { useReadContract, useAccount, useBalance } from "wagmi";
 import { formatEther, formatUnits } from "viem";
 const App = () => {
   const { address, status, isConnected } = useAccount();
+
+  // const getbalance = useBalance({
+  //   address: "0x655636E9f37cd425F609Eda79163DBd1f232B7B0",
+  // });
+
+  // console.log(getbalance.data);
 
   const totalLiquidity = useReadContract({
     abi: lendingProtocolAbi,
@@ -23,6 +29,8 @@ const App = () => {
     functionName: "getTotalEthLocked",
   });
 
+  console.log("eth locked" + totalETHLocked?.data);
+
   //lender functions
   console.log(address);
   console.log(isConnected);
@@ -34,7 +42,7 @@ const App = () => {
     functionName: "getLenderInfo",
     args: [address],
   });
-  console.log(lenderinfo.data);
+  // console.log("lender informationl" + lenderinfo.data);
 
   //borrower functions
 
@@ -44,7 +52,7 @@ const App = () => {
     functionName: "getBorrowerInfo",
     args: [address],
   });
-  console.log(borrowerinfo.data);
+  // console.log("borrower information" + borrowerinfo.data.ethDeposited);
   return (
     <Box
       sx={{

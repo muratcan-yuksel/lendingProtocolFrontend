@@ -1,7 +1,10 @@
 import { Box, Button, useMediaQuery } from "@mui/material";
-import { useState } from "react";
+// import { useState } from "react";
 import { useConnect, useDisconnect, useAccount } from "wagmi";
+import { getChainId } from "@wagmi/core";
 import { injected } from "wagmi/connectors";
+//root config.js for chains
+import { config } from "../../config.js";
 const WalletComponent = () => {
   //hooks
   const { connect, status } = useConnect();
@@ -9,6 +12,8 @@ const WalletComponent = () => {
   const { disconnect } = useDisconnect();
   const account = useAccount();
   console.log(account.isConnected);
+  const chainId = getChainId(config);
+  console.log(chainId);
 
   const connectWallet = () => {
     connect({ connector: injected() });
@@ -19,18 +24,18 @@ const WalletComponent = () => {
   const isSmallScreen = useMediaQuery("(max-width:600px)");
 
   // State to track whether the full address is being displayed
-  const [showFullAddress, setShowFullAddress] = useState(false);
+  // const [showFullAddress, setShowFullAddress] = useState(false);
 
   // Function to toggle the display of the full address on hover
-  const toggleAddressDisplay = () => {
-    setShowFullAddress(!showFullAddress);
-  };
+  // const toggleAddressDisplay = () => {
+  //   setShowFullAddress(!showFullAddress);
+  // };
 
   // Abbreviate the address to display
-  const abbreviatedAddress = `${account.address.substring(
+  const abbreviatedAddress = `${account?.address?.substring(
     0,
     6
-  )}...${account.address.substring(account.address.length - 4)}`;
+  )}...${account?.address?.substring(account?.address?.length - 4)}`;
 
   return (
     <Box>
@@ -42,7 +47,7 @@ const WalletComponent = () => {
               fontSize: "15px",
             }}
           >
-            Connected to {isSmallScreen ? abbreviatedAddress : account.address}
+            Connected to {isSmallScreen ? abbreviatedAddress : account?.address}
           </Box>
           <Button
             sx={{

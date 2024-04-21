@@ -1,5 +1,5 @@
 export const protocol_contract_address =
-  "0x946Ee3d3D964148CE930Ff2e7A6f5e6585336F21";
+  "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0";
 export const lendingProtocolAbi = [
   {
     inputs: [
@@ -109,7 +109,7 @@ export const lendingProtocolAbi = [
     outputs: [
       {
         internalType: "uint256",
-        name: "ehtDeposited",
+        name: "ethDeposited",
         type: "uint256",
       },
       {
@@ -153,13 +153,7 @@ export const lendingProtocolAbi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "_amount",
-        type: "uint256",
-      },
-    ],
+    inputs: [],
     name: "depositETH",
     outputs: [],
     stateMutability: "payable",
@@ -205,7 +199,7 @@ export const lendingProtocolAbi = [
         components: [
           {
             internalType: "uint256",
-            name: "ehtDeposited",
+            name: "ethDeposited",
             type: "uint256",
           },
           {

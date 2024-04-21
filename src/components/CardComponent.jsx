@@ -5,8 +5,9 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { formatEther, parseEther, parseUnits } from "viem";
+import { formatEther, parseEther, parseGwei, parseUnits } from "viem";
 import { useWriteContract } from "wagmi";
+import { writeContract } from "@wagmi/core";
 import {
   lendingProtocolAbi,
   protocol_contract_address,
@@ -14,12 +15,14 @@ import {
 import { tokenAbi, token_contract_address } from "../ABI/tokenAbi";
 import { useState } from "react";
 import { TextField } from "@mui/material";
+import { config } from "../../config";
 
 export default function CardComponent({ userInfo, position }) {
   const [LPTAmount, setLPTAmount] = useState(0);
   const [ETHAmount, setETHAmount] = useState(0);
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  // const { writeContract, isError, isPending, isSuccess, writeContractAsync } =
+  //   useWriteContract();
 
   const handleApprove = async () => {
     try {
@@ -33,7 +36,7 @@ export default function CardComponent({ userInfo, position }) {
       console.log(error);
     }
   };
-
+  console.log("userInfo eth amount" + userInfo?.ETHAmount);
   const callDepositLPT = async () => {
     try {
       writeContract({
@@ -50,7 +53,7 @@ export default function CardComponent({ userInfo, position }) {
   const handleDepositLPT = async () => {
     console.log(LPTAmount);
     try {
-      await handleApprove();
+      // await handleApprove();
       await callDepositLPT();
     } catch (error) {
       console.log(error);
@@ -60,17 +63,17 @@ export default function CardComponent({ userInfo, position }) {
   const callDepositETH = async () => {
     console.log(ETHAmount);
     try {
-      writeContract({
+      await writeContract(config, {
         abi: lendingProtocolAbi,
         address: protocol_contract_address,
         functionName: "depositETH",
-        args: [parseEther(ETHAmount)],
+        value: parseEther(ETHAmount),
       });
     } catch (error) {
       console.log(error);
     }
   };
-
+  // console.log(isError, isPending, isSuccess);
   const giveTimestamp = (timestamp) => {
     const date = new Date(Number(timestamp) * 1000);
     return date.toLocaleString();
@@ -84,8 +87,6 @@ export default function CardComponent({ userInfo, position }) {
         background: `linear-gradient(to right, #9613a1 0%, rgba(161, 198, 255, 1) 100%)`,
         borderRadius: 10, // Add some rounded corners
         color: "white",
-
-        border: "5px solid red",
       }}
     >
       {" "}
@@ -180,7 +181,13 @@ export default function CardComponent({ userInfo, position }) {
           </Typography>
         )}
       </CardContent>
-      <CardActions>
+      <CardActions
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         {position === "lender" ? (
           <Button
             sx={{

@@ -1,5 +1,5 @@
 export const token_contract_address =
-  "0x8615D77790F8A14E2dC996ba1eD7F040cE6A1d2B";
+  "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707";
 export const tokenAbi = [
   {
     inputs: [],
