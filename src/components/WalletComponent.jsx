@@ -1,4 +1,5 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, useMediaQuery } from "@mui/material";
+import { useState } from "react";
 import { useConnect, useDisconnect, useAccount } from "wagmi";
 import { injected } from "wagmi/connectors";
 const WalletComponent = () => {
@@ -13,6 +14,24 @@ const WalletComponent = () => {
     connect({ connector: injected() });
   };
 
+  //logic for address abbreviation
+
+  const isSmallScreen = useMediaQuery("(max-width:600px)");
+
+  // State to track whether the full address is being displayed
+  const [showFullAddress, setShowFullAddress] = useState(false);
+
+  // Function to toggle the display of the full address on hover
+  const toggleAddressDisplay = () => {
+    setShowFullAddress(!showFullAddress);
+  };
+
+  // Abbreviate the address to display
+  const abbreviatedAddress = `${account.address.substring(
+    0,
+    6
+  )}...${account.address.substring(account.address.length - 4)}`;
+
   return (
     <Box>
       {status === "success" || account.isConnected ? (
@@ -23,10 +42,11 @@ const WalletComponent = () => {
               fontSize: "15px",
             }}
           >
-            Connected to {account.address}
+            Connected to {isSmallScreen ? abbreviatedAddress : account.address}
           </Box>
           <Button
             sx={{
+              marginBottom: "10px",
               backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
               color: "white", // White text color for contrast
               fontWeight: "bold", // Bold text for emphasis
