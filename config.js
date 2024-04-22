@@ -7,5 +7,6 @@ export const config = createConfig({
     [mainnet.id]: http(),
     [sepolia.id]: http(),
     [hardhat.id]: http(),
+    [localhost.id]: http(),
   },
 });
