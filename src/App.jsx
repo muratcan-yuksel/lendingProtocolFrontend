@@ -96,27 +96,31 @@ const App = () => {
           </>
         )}
       </Box>
-      {/* <Box>
-        {isConnected && (
+      <Box>
+        {address && (
           <Box>
             {" "}
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, color: "white" }}
-            >
-              Total Liquidity: {formatUnits(totalLiquidity.data, 18)}
-            </Typography>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, color: "white" }}
-            >
-              Total ETH Locked: {formatEther(totalETHLocked.data)}
-            </Typography>{" "}
+            {totalLiquidity?.data && (
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1, color: "white" }}
+              >
+                Total Liquidity: {formatUnits(totalLiquidity?.data, 18)}
+              </Typography>
+            )}
+            {totalETHLocked?.data && (
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{ flexGrow: 1, color: "white" }}
+              >
+                Total ETH Locked: {formatEther(totalETHLocked?.data)}
+              </Typography>
+            )}
           </Box>
         )}
-      </Box> */}
+      </Box>
     </Box>
   );
 };

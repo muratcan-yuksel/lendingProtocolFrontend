@@ -5,7 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { formatEther, parseEther, parseGwei, parseUnits } from "viem";
+import { formatEther, parseEther, parseUnits } from "viem";
 import { useWriteContract, useWatchContractEvent } from "wagmi";
 import {
   lendingProtocolAbi,
@@ -20,8 +20,7 @@ export default function CardComponent({ userInfo, position }) {
   const [ETHAmount, setETHAmount] = useState(0);
   const prevFailureReason = useRef(null);
 
-  const { writeContract, isError, isPending, isSuccess, failureReason } =
-    useWriteContract();
+  const { writeContract, failureReason } = useWriteContract();
 
   useEffect(() => {
     if (failureReason !== prevFailureReason.current) {
@@ -137,7 +136,6 @@ export default function CardComponent({ userInfo, position }) {
         color: "white",
       }}
     >
-      askdjerrorMessage{" "}
       <CardContent>
         {position === "lender" ? (
           <Box>
