@@ -6,20 +6,50 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { formatEther, parseEther, parseGwei, parseUnits } from "viem";
-import { useWriteContract } from "wagmi";
+import { useWriteContract, useWatchContractEvent } from "wagmi";
 import {
   lendingProtocolAbi,
   protocol_contract_address,
 } from "../ABI/lendingProtocolAbi";
 import { tokenAbi, token_contract_address } from "../ABI/tokenAbi";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TextField } from "@mui/material";
 
 export default function CardComponent({ userInfo, position }) {
   const [LPTAmount, setLPTAmount] = useState(0);
   const [ETHAmount, setETHAmount] = useState(0);
+  const prevFailureReason = useRef(null);
 
-  const { writeContract, isError, isPending, isSuccess } = useWriteContract();
+  const { writeContract, isError, isPending, isSuccess, failureReason } =
+    useWriteContract();
+
+  useEffect(() => {
+    if (failureReason !== prevFailureReason.current) {
+      if (failureReason !== null) {
+        alert(failureReason);
+      } else {
+        return;
+      }
+      prevFailureReason.current = failureReason;
+    }
+  }, [failureReason]);
+  //events
+
+  useWatchContractEvent({
+    abi: lendingProtocolAbi,
+    address: protocol_contract_address,
+    eventName: "DepositedLPT",
+    onLogs(logs) {
+      console.log("New logs!", logs);
+    },
+  });
+
+  //functions
+
+  const giveTimestamp = (timestamp) => {
+    const date = new Date(Number(timestamp) * 1000);
+    return date.toLocaleString();
+  };
 
   const handleApprove = async () => {
     try {
@@ -33,7 +63,6 @@ export default function CardComponent({ userInfo, position }) {
       console.log(error);
     }
   };
-  console.log("userInfo eth amount" + userInfo?.ETHAmount);
   const callDepositLPT = async () => {
     try {
       writeContract({
@@ -61,9 +90,41 @@ export default function CardComponent({ userInfo, position }) {
     }
   };
   // console.log(isError, isPending, isSuccess);
-  const giveTimestamp = (timestamp) => {
-    const date = new Date(Number(timestamp) * 1000);
-    return date.toLocaleString();
+
+  const callWithdrawInterest = async () => {
+    try {
+      writeContract({
+        abi: lendingProtocolAbi,
+        address: protocol_contract_address,
+        functionName: "withdrawInterest",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const callWithdrawLiquidity = async () => {
+    try {
+      writeContract({
+        abi: lendingProtocolAbi,
+        address: protocol_contract_address,
+        functionName: "withdrawLiquidity",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const callRepayDebt = async () => {
+    try {
+      writeContract({
+        abi: lendingProtocolAbi,
+        address: protocol_contract_address,
+        functionName: "repayDebt",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -76,7 +137,7 @@ export default function CardComponent({ userInfo, position }) {
         color: "white",
       }}
     >
-      {" "}
+      askdjerrorMessage{" "}
       <CardContent>
         {position === "lender" ? (
           <Box>
@@ -185,7 +246,7 @@ export default function CardComponent({ userInfo, position }) {
             <Button
               sx={{
                 marginBottom: "1em",
-                backgroundColor: "#ffcd68", // Match background gradient's first color
+                backgroundColor: "#484d51", // Match background gradient's first color
                 color: "white", // White text color for contrast
                 fontWeight: "bold", // Bold text for emphasis
                 padding: "10px 20px", // Adjust padding for desired button size
@@ -204,6 +265,8 @@ export default function CardComponent({ userInfo, position }) {
             </Button>
             <Button
               sx={{
+                marginBottom: "1em",
+
                 backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
                 color: "white", // White text color for contrast
                 fontWeight: "bold", // Bold text for emphasis
@@ -220,28 +283,98 @@ export default function CardComponent({ userInfo, position }) {
               onClick={callDepositLPT}
             >
               Deposit LPT
+            </Button>{" "}
+            <Button
+              sx={{
+                marginBottom: "1em",
+
+                backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
+                color: "white", // White text color for contrast
+                fontWeight: "bold", // Bold text for emphasis
+                padding: "10px 20px", // Adjust padding for desired button size
+                borderRadius: 5, // Add some rounded corners
+                border: "none", // Remove default border
+                cursor: "pointer", // Set cursor to pointer on hover
+                "&:hover": {
+                  // Style on hover for visual feedback
+                  backgroundColor: "rgba(141, 198, 255, 1)", // Match background gradient's second color for a subtle shift
+                },
+              }}
+              size="small"
+              onClick={callWithdrawInterest}
+            >
+              Withdraw Interest
+            </Button>
+            <Button
+              sx={{
+                marginBottom: "1em",
+
+                backgroundColor: "#d83c0d", // Match background gradient's first color
+                color: "white", // White text color for contrast
+                fontWeight: "bold", // Bold text for emphasis
+                padding: "10px 20px", // Adjust padding for desired button size
+                borderRadius: 5, // Add some rounded corners
+                border: "none", // Remove default border
+                cursor: "pointer", // Set cursor to pointer on hover
+                "&:hover": {
+                  // Style on hover for visual feedback
+                  backgroundColor: "rgba(141, 198, 255, 1)", // Match background gradient's second color for a subtle shift
+                },
+              }}
+              size="small"
+              onClick={callWithdrawLiquidity}
+            >
+              Withdraw Liquidity
             </Button>
           </Box>
         ) : position === "borrower" ? (
-          <Button
+          <Box
             sx={{
-              backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
-              color: "white", // White text color for contrast
-              fontWeight: "bold", // Bold text for emphasis
-              padding: "10px 20px", // Adjust padding for desired button size
-              borderRadius: 5, // Add some rounded corners
-              border: "none", // Remove default border
-              cursor: "pointer", // Set cursor to pointer on hover
-              "&:hover": {
-                // Style on hover for visual feedback
-                backgroundColor: "rgba(141, 198, 255, 1)", // Match background gradient's second color for a subtle shift
-              },
+              display: "flex",
+              flexDirection: "column",
             }}
-            size="small"
-            onClick={callDepositETH}
           >
-            Deposit ETH
-          </Button>
+            {" "}
+            <Button
+              sx={{
+                marginBottom: "1em",
+                backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
+                color: "white", // White text color for contrast
+                fontWeight: "bold", // Bold text for emphasis
+                padding: "10px 20px", // Adjust padding for desired button size
+                borderRadius: 5, // Add some rounded corners
+                border: "none", // Remove default border
+                cursor: "pointer", // Set cursor to pointer on hover
+                "&:hover": {
+                  // Style on hover for visual feedback
+                  backgroundColor: "rgba(141, 198, 255, 1)", // Match background gradient's second color for a subtle shift
+                },
+              }}
+              size="small"
+              onClick={callDepositETH}
+            >
+              Deposit ETH
+            </Button>{" "}
+            <Button
+              sx={{
+                backgroundColor: "rgba(104, 110, 255, 1)", // Match background gradient's first color
+                color: "white", // White text color for contrast
+                fontWeight: "bold", // Bold text for emphasis
+                padding: "10px 20px", // Adjust padding for desired button size
+                borderRadius: 5, // Add some rounded corners
+                border: "none", // Remove default border
+                cursor: "pointer", // Set cursor to pointer on hover
+                "&:hover": {
+                  // Style on hover for visual feedback
+                  backgroundColor: "rgba(141, 198, 255, 1)", // Match background gradient's second color for a subtle shift
+                },
+              }}
+              size="small"
+              onClick={callRepayDebt}
+            >
+              Repay Debt
+            </Button>
+          </Box>
         ) : null}
       </CardActions>
     </Card>
